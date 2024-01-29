@@ -24,7 +24,7 @@
                             <h4>Tabel Data Pengguna</h4>
                         </div>
                         <div class="col-lg-3 text-end">
-                            <a href="{{route('data-guru.index')}}" class="btn btn-primary text-white">Data Guru</a>
+                            <a href="{{route('kelola-data-guru.index')}}" class="btn btn-primary text-white">Data Guru</a>
                         </div>
                     </div>
                     <hr>
@@ -97,7 +97,7 @@
     <!-- ============================================================== -->
 </div>
 
-    <form action="{{ route('data-guru.store') }}" method="POST">
+    <form action="{{ route('kelola-data-guru.store') }}" method="POST">
         @csrf
         @method('POST') 
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -152,7 +152,7 @@
     </form>
 
     @foreach ($dataguru as $item)
-    <form action="{{ route('data-guru.update', $item->id) }}" method="POST">
+    <form action="{{ route('kelola-data-guru.update', $item->id) }}" method="POST">
         @csrf
         @method('PUT') 
         <div class="modal fade" id="staticBackdrop1{{$item->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

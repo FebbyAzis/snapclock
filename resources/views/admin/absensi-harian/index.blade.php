@@ -54,7 +54,7 @@
                                     <a href="{{url('absensi/'.$item->id)}}" class="list-group-item list-group-item-action">
                                         <div class="d-flex w-100 justify-content-between">
                                             <h5 class="mb-1">Absensi Harian</h5>
-                                            <small class="text-muted">{{date("d/M/Y", strtotime($item->hari_tgl));}}</small>
+                                            <small class="text-muted">{{$item->hari}}, {{date("d/M/Y", strtotime($item->hari_tgl));}}</small>
                                         </div>
                                         <p class="mb-1">Jam Masuk : {{$item->jam_masuk}}</p>
                                         <small class="text-muted">Jam Keluar{{$item->jam_keluar}}</small>
@@ -99,7 +99,19 @@
                 <div class="modal-body">
                 <div class="row">
                     <div class="form-group">
-                        <label class="form-label" for="exampleInputText1">Jadwal Absensi</label>
+                        <label class="form-label" for="choices-single-default">Hari Absensi</label>
+                        <select class="form-select" data-trigger name="hari" id="hari">
+                            <option value="0">-</option>
+                                <option value="Senin">Senin</option>
+                                <option value="Selasa">Selasa</option>
+                                <option value="Rabu">Rabu</option>
+                                <option value="Kamis">Kamis</option>
+                                <option value="Jumat">Jumat</option>
+                                <option value="Sabtu">Sabtu</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="exampleInputText1">Tanggal Absensi</label>
                         <input type="date" class="form-control" id="exampleInputText1" name="hari_tgl">
                     </div>
                     <div class="col-sm-6">
@@ -117,8 +129,8 @@
                 </div>
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-danger text-white" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary text-white">Understood</button>
+                <button type="button" class="btn btn-danger text-white" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary text-white">Simpan</button>
                 </div>
             </div>
             </div>

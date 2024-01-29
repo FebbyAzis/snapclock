@@ -115,6 +115,13 @@
                                                 Masuk Sekarang
                                               </button> 
                                             @endif
+                                            {{-- @if ($tombol == null)
+                                            &nbsp;
+                                                <button type="button" class="btn btn-secondary text-white" data-bs-toggle="modal" data-bs-target="#staticBackdrop3">
+                                                    Terlambat
+                                                </button>   
+                                            
+                                            @endif --}}
                                         </center>
                                     </div>
                                     <div class="col-lg-12 mt-2">
@@ -165,7 +172,7 @@
                         <div class="row">
                             <div class="col-lg-2 mb-2">
                                 <p>Nama</p>
-                                <p>Tanggal Absensi</p>
+                                <p>Jadwal Absensi</p>
                                 <p>Jam Masuk Absensi</p>
                                 <p>Jam Keluar Absensi</p>
                                 <p>Status</p>
@@ -179,7 +186,7 @@
                             </div>
                             <div class="col-lg-9 mb-2">
                                 <p><b>{{$item->users->name}}</b></p>
-                                <p><b>{{date("d/M/Y", strtotime($item->jadwal_absensi->hari_tgl));}}</b></p>
+                                <p><b>{{$item->hari}}, {{date("d/M/Y", strtotime($item->jadwal_absensi->hari_tgl));}}</b></p>
                                 @if ($item->jam_masuk == null)
                                     <p><b>-</b></p>
                                 @else
@@ -212,7 +219,7 @@
                                     @endif
                                 @elseif($item->keterangan == 4)
                                     <p><b>Tidak Hadir, Alfa/Tanpa Keterangan</b></p>
-                                    @elseif($item->keterangan == 5)
+                                @elseif($item->keterangan == 5)
                                     <p><b>Tidak Hadir, Cuti</b></p>
                                 @endif
                             </div>
@@ -236,7 +243,10 @@
                                     </div>
                                     <div class="col-lg-9 mb-2">
                                         <img src="{{ url('/surat_izin/'.$item->surat_izin) }} " width="200px">
+                                        <br>
+                                        <a href="{{ asset('/surat_izin/' . $item->surat_izin) }}" target="_blank" class="btn btn-primary text-white mt-4">Lihat Dokumen</a>
                                     </div>    
+                                    
                                 @endif
                             @elseif($item->keterangan == 3)
                                 @if ($item->surat_izin == null)
@@ -258,8 +268,35 @@
                                     </div>
                                     <div class="col-lg-9 mb-2">
                                         <img src="{{ url('/surat_izin/'.$item->surat_izin) }} " width="200px">
+                                        <br>
+                                        <a href="{{ asset('/surat_izin/' . $item->surat_izin) }}" target="_blank" class="btn btn-primary text-white mt-4">Lihat Dokumen</a>
                                     </div>    
                                 @endif
+                                @elseif($item->keterangan == 5)
+                                @if ($item->surat_izin == null)
+                                    <div class="col-lg-2 mb-2">
+                                        <p>Surat Izin</p>
+                                    </div>
+                                    <div class="col-lg-1 mb-2 text-end">
+                                        <p>:</p>
+                                    </div>
+                                    <div class="col-lg-9 mb-2">
+                                        <p><b>-</b></p>
+                                    </div>    
+                                @else
+                                    <div class="col-lg-2 mb-2">
+                                        <p>Surat Izin</p>
+                                    </div>
+                                    <div class="col-lg-1 mb-2 text-end">
+                                        <p>:</p>
+                                    </div>
+                                    <div class="col-lg-9 mb-2">
+                                        <img src="{{ url('/surat_izin/'.$item->surat_izin) }} " width="200px">
+                                        <br>
+                                        <a href="{{ asset('/surat_izin/' . $item->surat_izin) }}" target="_blank" class="btn btn-primary text-white mt-4">Lihat Dokumen</a>
+                                    </div>    
+                                @endif
+                                
                             @endif
                             
                             <center>
@@ -314,8 +351,8 @@
                     <input type="hidden" name="jadwal_absensi_id" value="{{$absenharian->id}}">
                     <input type="hidden" name="users_id" value="{{Auth::user()->id}}">
                     <div class="form-group">
-                        <label class="form-label" for="exampleInputText1">Tanggal Absensi</label>
-                        <input type="text" class="form-control" id="exampleInputText1" value="{{date("d/M/Y", strtotime($absenharian->hari_tgl));}}" readonly>
+                        <label class="form-label" for="exampleInputText1">Jadwal Absensi</label>
+                        <input type="text" class="form-control" id="exampleInputText1" value="{{$absenharian->hari}}, {{date("d/M/Y", strtotime($absenharian->hari_tgl));}}" readonly>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
@@ -361,7 +398,6 @@
                         <option selected>Pilih keterangan tidak hadir</option>
                         <option value="2">Sakit</option>
                         <option value="3">Izin</option>
-                        <option value="4">Alfa/Tanpa Keterangan</option>
                         <option value="5">Cuti</option>
                       </select>
                 
@@ -412,5 +448,36 @@
         </div>
     </form>
     @endforeach
+
+    <form action="{{ url('/tidakhadir') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        @method('POST') 
+        <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Absensi Harian</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <div class="col-lg-12 mt-2 mb-2">
+                
+                    <input type="hidden" name="jadwal_absensi_id" value="{{$absenharian->id}}">
+                    <input type="hidden" name="users_id" value="{{Auth::user()->id}}">
+                    <input type="hidden" name="keterangan" value="4">
+                      <div class="col-lg-12 mt-3 mb-2">
+                        <p>Apakah anda yakin ingin mengkonfirmasikan bahwa anda tidak dapat hadir hari ini?</p>
+
+                      </div>
+                </div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-danger text-white" data-bs-dismiss="modal">Tidak</button>
+                <button type="submit" class="btn btn-primary text-white">Ya</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    </form>
     
 @endsection

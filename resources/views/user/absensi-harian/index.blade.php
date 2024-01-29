@@ -55,7 +55,7 @@
                                         <a href="{{url('absensi-harian/'.$item->id)}}" class="list-group-item list-group-item-action">
                                             <div class="d-flex w-100 justify-content-between">
                                                 <h5 class="mb-1">Absensi Harian</h5>
-                                                <small class="text-muted">{{date("d/M/Y", strtotime($item->hari_tgl));}}</small>
+                                                <small class="text-muted">{{$item->hari}}, {{date("d/M/Y", strtotime($item->hari_tgl));}}</small>
                                             </div>
                                             <p class="mb-1">Jam Masuk : {{$item->jam_masuk}}</p>
                                             <small class="text-muted">Jam Keluar{{$item->jam_keluar}}</small>

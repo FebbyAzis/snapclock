@@ -30,7 +30,7 @@ Route::middleware(['auth', 'admin'])->group(function(){
     Route::get('/absensi/{id}', [AbsensiController::class, 'absensiDetail']);
     Route::put('/edit-data-guru/{id}', [DataGuruController::class, 'editDataGuru']);
     Route::put('/hapus-guru/{id}', [DataGuruController::class, 'hapusGuru']);
-    Route::resource('/data-guru', DataGuruController::class);
+    Route::resource('/kelola-data-guru', DataGuruController::class);
     Route::resource('/laporan-absensi', LaporanController::class);
     Route::get('/tambah-guru', [DataGuruController::class, 'tambahguru']);
 });
@@ -38,10 +38,13 @@ Route::middleware(['auth', 'admin'])->group(function(){
 Route::middleware(['auth'])->group(function(){
     Route::get('/dashboard-guru', [DashboardController::class, 'dashboardUser']);
     Route::get('/absensi-harian', [AbsensiController::class, 'absenHarianGuru']);
+    Route::post('/tidakhadir', [AbsensiController::class, 'tidakHadir']);
     Route::get('/absensi-harian/{id}', [AbsensiController::class, 'absenHarianGuruDetail']);
     Route::post('/create-absen-guru', [AbsensiController::class, 'createAbsenGuru']);
     Route::post('/keterangan-ketidakhadiran', [AbsensiController::class, 'keteranganKetidakhadiran']);
     Route::put('/keluar-absensi/{id}', [AbsensiController::class, 'keluarAbsen']);
+    Route::get('/data-guru', [DataGuruController::class, 'guru']);
+    Route::put('/edit-data-guru/{id}', [DataGuruController::class, 'editDataGuru']);
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

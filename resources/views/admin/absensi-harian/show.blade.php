@@ -21,7 +21,7 @@
                 <div class="white-box">
                     <div class="row align-items-center">
                         <div class="col-lg-9 col-md-4 col-sm-4 col-xs-12">
-                            <h4>Detail Absensi Harian <b>{{date("d/M/Y", strtotime($absen->hari_tgl));}}</b></h4>
+                            <h4>Detail Absensi Harian <b>{{$absen->hari}}, {{date("d/M/Y", strtotime($absen->hari_tgl));}}</b></h4>
                         </div>
                         
                     </div>
@@ -32,7 +32,6 @@
                                 <tr>
                                     <th class="border-top-0">No</th>
                                     <th class="border-top-0">Nama</th>
-                                    <th class="border-top-0">Tanggal</th>
                                     <th class="border-top-0">Jam Masuk Absensi</th>
                                     <th class="border-top-0">Jam Keluar Absensi</th>
                                     <th class="border-top-0">Status</th>

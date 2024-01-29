@@ -9,6 +9,7 @@ use App\Models\Absensi;
 use App\Models\DataGuru;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class AbsensiController extends Controller
 {
@@ -21,6 +22,7 @@ class AbsensiController extends Controller
     public function createAbsen(Request $request)
     {
         $save = new JadwalAbsensi;
+        $save->hari = $request->hari;
         $save->hari_tgl = $request->hari_tgl;
         $save->jam_masuk = $request->jam_masuk; 
         $save->jam_keluar = $request->jam_keluar;
@@ -44,6 +46,7 @@ class AbsensiController extends Controller
         $absenharian = JadwalAbsensi::find($id);
         $now = Carbon::now();
         $absendetail = Absensi::where('jadwal_absensi_id', $id)->where('users_id', $user)->get();
+       
         $users = Users::where('id', $user)->where('status', 1)->first();
         $tombol = Absensi::where('jadwal_absensi_id', $id)->where('users_id', $user)->first();
         $absensi = Absensi::where('users_id', $user)->whereDate('created_at', $now->toDateString())->first();
@@ -96,6 +99,15 @@ class AbsensiController extends Controller
         //     'keterangan' => 'required',
         //     'surat_izin' => 'required',
         // ]);
+
+        // $request->validate([
+        //     // '' => 'required',
+        //     'surat_izin' => 'required|mimes:pdf,doc,docx,xls,xlsx,jpg,png,jpeg',
+        // ]);
+
+        // $file = $request->file('file');
+        // $name = $file->getClientOriginalName();
+        // $path = $file->storeAs('files', $name, 'public');
         
         $file = $request->file('surat_izin');
         $nama_file = time()."_".$file->getClientOriginalName();
@@ -108,12 +120,14 @@ class AbsensiController extends Controller
         //     'keterangan' => $request->keterangan,
         //     'surat_izin' => $nama_file,
         // ]);
+
         $save = new Absensi;
         $save->jadwal_absensi_id = $request->jadwal_absensi_id;
         $save->users_id = $request->users_id;
         $save->keterangan = $request->keterangan; 
         $save->surat_izin = $nama_file;
 
+       
         $save->save(); 
         return redirect()->back()->with('Successs', 'Terima Kasih, Anda telah mengkonfirmasikan bahwa anda tidak dapat hadir hari ini.');
     }
@@ -133,4 +147,15 @@ class AbsensiController extends Controller
         $absenDetail = Absensi::where('jadwal_absensi_id', $id)->orderBy('id', 'desc')->get();
         return view('admin.absensi-harian.show', compact('absen', 'absenDetail'));
     }
+
+    public function tidakHadir(Request $request)
+    {
+        $save = new Absensi;
+        $save->jadwal_absensi_id = $request->jadwal_absensi_id;
+        $save->users_id = $request->users_id;
+        $save->keterangan = $request->keterangan;
+
+        $save->save(); 
+        return redirect()->back()->with('Success', 'Terimakasih, telah mengkonfirmasi bahwa anda tidak dapat hadir');
+    }    
 }

@@ -124,7 +124,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link {{ request()->is('data-guru*') ? 'active' : '' }}, {{ request()->is('tambah-guru*') ? 'active' : '' }}" href="{{route('data-guru.index')}}"
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link {{ request()->is('kelola-data-guru*') ? 'active' : '' }}, {{ request()->is('tambah-guru*') ? 'active' : '' }}" href="{{route('kelola-data-guru.index')}}"
                                 aria-expanded="false">
                                 <i class="fa fa-user" aria-hidden="true"></i>
                                 <span class="hide-menu">Data Guru</span>

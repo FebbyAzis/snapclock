@@ -1,4 +1,4 @@
-@extends('admin.layout.app')
+@extends('user.layout.app')
 @section('content')
 <div class="page-wrapper">
     <!-- ============================================================== -->
@@ -21,18 +21,24 @@
                 <div class="white-box">
                     <div class="row">
                         <div class="col-lg-9 mt-2">
-                            <h4>Tabel Data Guru</h4>
+                            <h4>Detail Data Guru</h4>
                         </div>
-                        <div class="col-lg-3 text-end">
-                            <a href="{{url('/tambah-guru')}}" class="btn btn-primary text-white">Tambah Guru</a>
-                            {{-- <button type="button" class="btn btn-primary text-white" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                Tambah Guru
-                              </button>  --}}
-                        </div>
+                        @foreach ($guru as $item)
+                            @if ($item->status == 1)
+                            <div class="col-lg-3 text-end">
+                                <button type="button" class="btn btn-primary text-white" data-bs-toggle="modal" data-bs-target="#staticBackdrop1{{$item->id}}">
+                                    Edit Data
+                                </button>
+                            </div>
+                            @endif
+                        @endforeach
+                        
                     </div>
                     <hr>
+                    @foreach ($guru as $item)
+                            @if ($item->status == 1)
                     <div class="col-lg-12 mt-2 mb-2">
-                        <p>Berikut adalah tabel data guru yang terdaftar didalam aplikasi SnapCLOCK.</p>
+                        <p>Berikut adalah detail data guru yang terdaftar di aplikasi SnapCLOCK.</p>
                     </div>
                     @if (session('Success'))
                         <div class="mb-3 alert alert-left alert-success alert-dismissible fade show" role="alert">
@@ -46,48 +52,27 @@
                             <button type="button" class="btn-close btn-close-grey" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                         @endif
-                    <div class="table-responsive">
-                        <table class="table text-nowrap">
-                            <thead>
-                                <tr>
-                                    <th class="border-top-0">No</th>
-                                    <th class="border-top-0">Nama</th>
-                                    <th class="border-top-0">Email</th>
-                                    <th class="border-top-0">No Telepon</th>
-                                    <th class="border-top-0">Alamat</th>
-                                    <th class="border-top-0">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($dataguru as $no=>$item)
-                                <tr>
-                                    
-                                        <td>{{$no+1}}</td>
-                                        <td>{{$item->name}}</td>
-                                        <td>{{$item->email}}</td>
-                                        <td>{{$item->no_tlp}}</td>
-                                        <td>{{$item->alamat}}</td>
-                                        <td>
-                                            <a href="{{route('kelola-data-guru.show', $item->id)}}" class="btn btn-info text-white">
-                                                Lihat
-                                            </a>
-
-                                            <button type="button" class="btn btn-primary text-white" data-bs-toggle="modal" data-bs-target="#staticBackdrop1{{$item->id}}">
-                                                Edit
-                                              </button> 
-
-                                              <button type="button" class="btn btn-danger text-white" data-bs-toggle="modal" data-bs-target="#staticBackdrop2{{$item->id}}">
-                                                Hapus
-                                              </button> 
-                                        </td>
-
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                        </div>
-                       
+                    <div class="col-lg-12 mt-2 mb-2 text-center">
+                        
+                            <img src="{{asset('plugins/images/users/d3.jpg')}}" alt="user-img" width="10%" class="img-circle mb-2">
+                            <h3 class="mt-2"><b>{{Auth::user()->name}}</b></h3>
+                            <h4><b>{{Auth::user()->email}}</b></h4>
+                            <h4>{{Auth::user()->no_tlp}}</h4>
+                            <h5>{{Auth::user()->alamat}}</h5>
+                            
+                         
+                        
+                            
+                            
                     </div>
+                    @else
+                            <div class="col-lg-12 mt-2 mb-2 bg-danger">
+                                <p class="text-center text-white">Anda belum terdaftar sebagai guru! 
+                                    Segera hubungi pihak admin untuk mendaftarkan anda sebagai guru di aplikasi SnapCLOCK.
+                                </p>
+                            </div>
+                    @endif
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -107,7 +92,7 @@
     <!-- ============================================================== -->
 </div>
 
-    <form action="{{ route('kelola-data-guru.store') }}" method="POST">
+    <form action="{{ route('data-guru.store') }}" method="POST">
         @csrf
         @method('POST') 
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -124,7 +109,7 @@
                             <label class="form-label" for="choices-single-default">Pilih Pengguna</label>
                             <select class="form-select" data-trigger name="users_id" id="users_id">
                                 <option value="0">-</option>
-                                @foreach ($dataguru as $s)
+                                @foreach ($guru as $s)
                                 @if ($s->id != 1)
                                     <option value="{{ $s->id }}" {{old('users_id') == $s->id ?  'selected' : null}}>{{ $s->name }}
                                     </option>
@@ -161,15 +146,15 @@
         </div>
     </form>
 
-    @foreach ($dataguru as $item)
-    <form action="{{ url('edit-data-guru', $item->id) }}" method="POST">
+    @foreach ($guru as $item)
+    <form action="{{ url('edit-data', $item->id) }}" method="POST">
         @csrf
         @method('PUT') 
         <div class="modal fade" id="staticBackdrop1{{$item->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Tambah Guru</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">Edit Data Guru</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -181,7 +166,11 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="exampleInputText1">Email</label>
+                            
                             <input type="text" class="form-control" name="email" value="{{$item->email}}" readonly>
+                            <p class="mt-2 mb-2">*Catatan! Email yang terdaftar tidak dapat diubah karena Email saat ini digunakan untuk 
+                                akses login masuk ke aplikasi SnapCLOCK.
+                            </p>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="exampleInputText1">No Telepon</label>
@@ -205,7 +194,7 @@
     </form>
     @endforeach
 
-    @foreach ($dataguru as $item)
+    @foreach ($guru as $item)
     <form action="{{ url('hapus-guru', $item->id) }}" method="POST">
         @csrf
         @method('PUT') 

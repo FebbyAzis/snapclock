@@ -73,4 +73,12 @@ class DataGuruController extends Controller
 
         return redirect()->back()->with('Success', 'Data berhasil diubah');
     }
+
+    public function guru()
+    {
+        $user = auth()->id();
+        $guru = Users::where('id',$user)->get();
+        // dd($guru);
+        return view('user.dataguru.index', compact('guru', 'user'));
+    }
 }
